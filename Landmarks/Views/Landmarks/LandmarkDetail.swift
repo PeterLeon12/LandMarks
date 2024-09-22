@@ -1,6 +1,5 @@
-
-
 import SwiftUI
+import MapKit
 
 struct LandmarkDetail: View {
     @Environment(ModelData.self) var modelData
@@ -16,7 +15,9 @@ struct LandmarkDetail: View {
         ScrollView {
             MapView(coordinate: landmark.locationCoordinate)
                 .frame(height: 300)
+
             Spacer(minLength: 130)
+
             CircleImage(image: landmark.image)
                 .offset(y: -130)
                 .padding(.bottom, -130)
@@ -41,11 +42,35 @@ struct LandmarkDetail: View {
                 Text("About \(landmark.name)")
                     .font(.title2)
                 Text(landmark.description)
+
+                // Button to open in Maps
+                Button(action: {
+                    openInMaps()
+                }) {
+                    Label("Open in Maps", systemImage: "map")
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(10)
+                }
+                .padding(.top)
             }
             .padding()
         }
         .navigationTitle(landmark.name)
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // Function to open the Maps app with directions to the landmark
+    private func openInMaps() {
+        let coordinate = landmark.locationCoordinate
+        let placemark = MKPlacemark(coordinate: coordinate)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = landmark.name
+        mapItem.openInMaps(launchOptions: [
+            MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving
+        ])
     }
 }
 
