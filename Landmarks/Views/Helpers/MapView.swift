@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 import MapKit
 
@@ -7,7 +5,13 @@ struct MapView: View {
     var coordinate: CLLocationCoordinate2D
 
     var body: some View {
-        Map(position: .constant(.region(region)))
+        Map(position: .constant(.region(region))) {
+            // Add the Marker here
+            Marker(coordinate: coordinate) {
+                Image(systemName: "mappin.circle.fill")
+                    .foregroundColor(.red)
+            }
+        }
     }
 
     private var region: MKCoordinateRegion {
